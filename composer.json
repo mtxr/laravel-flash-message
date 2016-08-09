@@ -1,11 +1,12 @@
 {
-    "name": "laracasts/flash",
-    "description": "Easy flash notifications",
+    "name": "mtxr/flash-message",
+    "description": "Flash Messages made easy. Forked from laracasts/flash",
     "license": "MIT",
+    "version": "1.0.1",
     "authors": [
         {
-            "name": "Jeffrey Way",
-            "email": "jeffrey@laracasts.com"
+            "name": "Matheus",
+            "email": "me@mteixeira.me"
         }
     ],
     "require": {
@@ -17,10 +18,10 @@
     },
     "autoload": {
         "psr-0": {
-            "Laracasts\\Flash": "src/"
+            "FlashMessage\\": "src/"
         },
         "files": [
-            "src/Laracasts/Flash/functions.php"
+            "src/FlashMessage/functions.php"
         ]
     },
     "minimum-stability": "stable"

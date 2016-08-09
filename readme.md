@@ -1,16 +1,18 @@
-# Easy Flash Messages for Your Laravel App
+# FlashMessages made easy
+
+Forked from [laracasts/flash](https://github.com/laracasts/flash).
 
 ## Installation
 
 First, pull in the package through Composer.
 
-Run `composer require laracasts/flash`
+Run `composer require mtxr/flash-message`
 
 And then, if using Laravel 5, include the service provider within `config/app.php`.
 
 ```php
 'providers' => [
-    Laracasts\Flash\FlashServiceProvider::class,
+    Flash\FlashServiceProvider::class,
 ];
 ```
 

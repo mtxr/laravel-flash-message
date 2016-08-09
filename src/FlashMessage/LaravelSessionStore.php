@@ -1,6 +1,6 @@
 <?php
 
-namespace Laracasts\Flash;
+namespace FlashMessage;
 
 use Illuminate\Session\Store;
 

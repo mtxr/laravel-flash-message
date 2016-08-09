@@ -1,6 +1,6 @@
 <?php
 
-namespace Laracasts\Flash;
+namespace FlashMessage;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -21,12 +21,12 @@ class FlashServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            'Laracasts\Flash\SessionStore',
-            'Laracasts\Flash\LaravelSessionStore'
+            'FlashMessage\SessionStore',
+            'FlashMessage\LaravelSessionStore'
         );
 
         $this->app->singleton('flash', function () {
-            return $this->app->make('Laracasts\Flash\FlashNotifier');
+            return $this->app->make('FlashMessage\FlashNotifier');
         });
     }
 
@@ -37,10 +37,10 @@ class FlashServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__ . '/../../views', 'flash');
+        $this->loadViewsFrom(__DIR__ . '/../views', 'flash');
 
         $this->publishes([
-            __DIR__ . '/../../views' => base_path('resources/views/vendor/flash')
+            __DIR__ . '/../views' => base_path('resources/views/vendor/flash')
         ]);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laracasts\Flash;
+namespace Flash;
 
 class FlashNotifier
 {
@@ -11,6 +11,12 @@ class FlashNotifier
      */
     private $session;
 
+    /**
+     * Array of messages.
+     *
+     * @var Array
+     */
+    private $messages = [];
     /**
      * Create a new flash notifier instance.
      *
@@ -73,23 +79,23 @@ class FlashNotifier
         return $this;
     }
 
-    /**
-     * Flash an overlay modal.
-     *
-     * @param  string $message
-     * @param  string $title
-     * @param  string $level
-     * @return $this
-     */
-    public function overlay($message, $title = 'Notice', $level = 'info')
-    {
-        $this->message($message, $level);
+    // /**
+    //  * Flash an overlay modal.
+    //  *
+    //  * @param  string $message
+    //  * @param  string $title
+    //  * @param  string $level
+    //  * @return $this
+    //  */
+    // public function overlay($message, $title = 'Notice', $level = 'info')
+    // {
+    //     $this->message($message, $level);
 
-        $this->session->flash('flash_notification.overlay', true);
-        $this->session->flash('flash_notification.title', $title);
+    //     $this->session->flash('flash_notification.overlay', true);
+    //     $this->session->flash('flash_notification.title', $title);
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * Flash a general message.
@@ -100,8 +106,12 @@ class FlashNotifier
      */
     public function message($message, $level = 'info')
     {
-        $this->session->flash('flash_notification.message', $message);
-        $this->session->flash('flash_notification.level', $level);
+        $this->messages[] = [
+            'message'   => $message,
+            'level'     => $level,
+            'important' => false,
+        ];
+        $this->session->flash('flash_notification.messages', $this->messages);
 
         return $this;
     }
@@ -113,9 +123,25 @@ class FlashNotifier
      */
     public function important()
     {
-        $this->session->flash('flash_notification.important', true);
+        if (empty($this->messages)) {
+            return $this;
+        }
+
+        $this->messages[key(array_slice($array, -1, 1,TRUE))]['important'] = true;
+        $this->session->flash('flash_notification.messages', $this->messages);
 
         return $this;
+    }
+
+    /**
+     * Clear all messages
+     *
+     * @return $this
+     */
+    public function clear()
+    {
+        $this->messages = [];
+        $this->session->forget('flash_notification.messages');
     }
 }
 
