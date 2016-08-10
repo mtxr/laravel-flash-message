@@ -108,6 +108,7 @@ class FlashNotifier
         if (empty($this->messages)) {
             return $this;
         }
+
         $key = key(array_slice($this->messages, -1, 1,TRUE));
         if (!isset($this->messages[$key])) {
             return $this;
