@@ -110,13 +110,7 @@ class FlashNotifier
      */
     public function important($important = true)
     {
-        if (!isset($this->messages[$this->lastKey])) {
-            return $this;
-        }
-        $this->messages[$this->lastKey]['important'] = $important;
-        $this->session->flash('flash_notification.messages', $this->messages);
-
-        return $this;
+        return $this->setProperty('important', $important);
     }
 
     /**
@@ -126,13 +120,7 @@ class FlashNotifier
      */
     public function icon($icon = null)
     {
-        if (!isset($this->messages[$this->lastKey])) {
-            return $this;
-        }
-        $this->messages[$this->lastKey]['icon'] = $icon;
-        $this->session->flash('flash_notification.messages', $this->messages);
-
-        return $this;
+        return $this->setProperty('icon', $icon);
     }
 
     /**
@@ -168,6 +156,19 @@ class FlashNotifier
         return $this;
     }
 
+    private function setProperty($property, $value)
+    {
+        if (!isset($this->messages[$this->lastKey])) {
+            return $this;
+        }
+
+        $this->messages[$this->lastKey][$property] = $value;
+
+        $this->session->flash('flash_notification.messages', $this->messages);
+
+        return $this;
+    }
+
     private function messageGenerator($message, $level, $important, $icon = null)
     {
         return [
@@ -176,6 +177,12 @@ class FlashNotifier
             'important' => $important,
             'icon'      => $icon,
         ];
+    }
+
+    private function udpateSesion()
+    {
+        $this->session->flash('flash_notification.messages', $this->messages);
+        return $this;
     }
 }
 

@@ -35,6 +35,16 @@ You may also do:
 - `flash('Message', 'warning')`
 - `flash('Message')->important()`
 
+Adding Icons:
+- `flash('Message')->icon('fa fa-exclamation-circle')`
+
+Deleting last message:
+- `flash()->delete()`
+
+Clearing message queue:
+- `flash()->clear()`
+
+
 If you need, you can flash two messages in the same request:
 
 ```php
