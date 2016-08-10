@@ -1,0 +1,28 @@
+{
+    "name": "mtxr/laravel-flash-message",
+    "description": "Flash Messages made easy. Based on laracasts/flash",
+    "license": "MIT",
+    "version": "1.0.1",
+    "authors": [
+        {
+            "name": "Matheus",
+            "email": "me@mteixeira.me"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "~5.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "FlashMessage\\": "src/"
+        },
+        "files": [
+            "src/FlashMessage/functions.php"
+        ]
+    },
+    "minimum-stability": "stable"
+}
