@@ -109,7 +109,7 @@ class FlashNotifier
             return $this;
         }
 
-        $this->messages[key(array_slice($array, -1, 1,TRUE))]['important'] = true;
+        $this->messages[key(array_slice($this->messages, -1, 1,TRUE))]['important'] = true;
         $this->session->flash('flash_notification.messages', $this->messages);
 
         return $this;
