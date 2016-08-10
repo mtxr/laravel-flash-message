@@ -1,6 +1,6 @@
 {
-    "name": "mtxr/flash-message",
-    "description": "Flash Messages made easy. Forked from laracasts/flash",
+    "name": "mtxr/laravel-flash-message",
+    "description": "Flash Messages made easy. Based on laracasts/flash",
     "license": "MIT",
     "version": "1.0.1",
     "authors": [
