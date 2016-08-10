@@ -17,6 +17,14 @@ class FlashNotifier
      * @var Array
      */
     private $messages = [];
+
+    /**
+     * Last message key.
+     *
+     * @var int
+     */
+    private $lastKey = -1;
+
     /**
      * Create a new flash notifier instance.
      *
@@ -33,9 +41,9 @@ class FlashNotifier
      * @param  string $message
      * @return $this
      */
-    public function info($message)
+    public function info($message, $important = false)
     {
-        $this->message($message, 'info');
+        $this->message($message, 'info', $important);
 
         return $this;
     }
@@ -46,9 +54,9 @@ class FlashNotifier
      * @param  string $message
      * @return $this
      */
-    public function success($message)
+    public function success($message, $important = false)
     {
-        $this->message($message, 'success');
+        $this->message($message, 'success', $important);
 
         return $this;
     }
@@ -59,9 +67,9 @@ class FlashNotifier
      * @param  string $message
      * @return $this
      */
-    public function error($message)
+    public function error($message, $important = false)
     {
-        $this->message($message, 'danger');
+        $this->message($message, 'danger', $important);
 
         return $this;
     }
@@ -72,9 +80,9 @@ class FlashNotifier
      * @param  string $message
      * @return $this
      */
-    public function warning($message)
+    public function warning($message, $important = false)
     {
-        $this->message($message, 'warning');
+        $this->message($message, 'warning', $important);
 
         return $this;
     }
@@ -86,13 +94,10 @@ class FlashNotifier
      * @param  string $level
      * @return $this
      */
-    public function message($message, $level = 'info')
+    public function message($message, $level = 'info', $important = false)
     {
-        $this->messages[] = [
-            'message'   => $message,
-            'level'     => $level,
-            'important' => false,
-        ];
+        $this->lastKey++;
+        $this->messages[$this->lastKey] = $this->messageGenerator($message, $level, $important);
         $this->session->flash('flash_notification.messages', $this->messages);
 
         return $this;
@@ -103,17 +108,28 @@ class FlashNotifier
      *
      * @return $this
      */
-    public function important()
+    public function important($important = true)
     {
-        if (empty($this->messages)) {
+        if (!isset($this->messages[$this->lastKey])) {
             return $this;
         }
+        $this->messages[$this->lastKey]['important'] = $important;
+        $this->session->flash('flash_notification.messages', $this->messages);
 
-        $key = key(array_slice($this->messages, -1, 1,TRUE));
-        if (!isset($this->messages[$key])) {
+        return $this;
+    }
+
+    /**
+     * Add an icon in front of the message
+     *
+     * @return $this
+     */
+    public function icon($icon = null)
+    {
+        if (!isset($this->messages[$this->lastKey])) {
             return $this;
         }
-        $this->messages[$key]['important'] = true;
+        $this->messages[$this->lastKey]['icon'] = $icon;
         $this->session->flash('flash_notification.messages', $this->messages);
 
         return $this;
@@ -126,8 +142,40 @@ class FlashNotifier
      */
     public function clear()
     {
+        $this->lastKey  = -1;
         $this->messages = [];
         $this->session->flash('flash_notification.messages', $this->messages);
+
+        return $this;
+    }
+
+    /**
+     * Delete last message
+     *
+     * @return $this
+     */
+    public function delete()
+    {
+        if ($this->lastKey < 0) {
+            return $this;
+        }
+
+        $this->lastKey--;
+        array_pop($this->messages);
+
+        $this->session->flash('flash_notification.messages', $this->messages);
+
+        return $this;
+    }
+
+    private function messageGenerator($message, $level, $important, $icon = null)
+    {
+        return [
+            'message'   => $message,
+            'level'     => $level,
+            'important' => $important,
+            'icon'      => $icon,
+        ];
     }
 }
 

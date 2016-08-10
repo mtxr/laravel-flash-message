@@ -9,15 +9,15 @@ if ( ! function_exists('flash')) {
      * @param  string      $level
      * @return FlashMessage\FlashNotifier
      */
-    function flash($message = null, $level = 'info')
+    function flash($message = null, $level = 'info', $important = false)
     {
-        $notifier = app('flash');
+        $flasher = app('flash');
 
         if ( ! is_null($message)) {
-            return $notifier->message($message, $level);
+            return $flasher->message($message, $level, $important);
         }
 
-        return $notifier;
+        return $flasher;
     }
 
 }

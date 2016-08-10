@@ -110,8 +110,8 @@ The package view will now be located in the `app/views/packages/mtxr/laravel-fla
 A common desire is to display a flash message for a few seconds, and then hide it. To handle this, write a simple bit of JavaScript. For example, using jQuery, you might add the following snippet just before the closing `</body>` tag.
 
 ```
-<script>
-$('.flash-message.alert').not('.alert-important').delay(3000).fadeOut(350);
+<script type="text/javascript">
+$('.flash-message.alert').not('.alert-important').delay(5000).slideUp(350);
 </script>
 ```
 

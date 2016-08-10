@@ -16,88 +16,131 @@ class FlashTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/** @test */
-	public function it_displays_default_flash_notifications()
-	{
+    public function it_displays_default_flash_notifications()
+    {
         $message = 'Test message';
         $data = [];
-        $data[] = [
-            'message'   => $message,
-            'level'     => 'info',
-            'important' => false,
-        ];
+        $data[] = $this->messageGenerator($message, 'info', false);
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
 
         $this->flash->message($message);
 
         $message = 'Test message 2';
-        $data[] = [
-            'message'   => $message,
-            'level'     => 'info',
-            'important' => false,
-        ];
+        $data[] = $this->messageGenerator($message, 'info', false);
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
 
         $this->flash->message($message);
-	}
+    }
 
     /** @test */
     public function it_displays_info_flash_notifications()
     {
         $message = 'Test message';
         $data = [];
-        $data[] = [
-            'message'   => $message,
-            'level'     => 'info',
-            'important' => false,
-        ];
+        $data[] = $this->messageGenerator($message, 'info', false);
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
 
         $this->flash->info($message);
     }
 
-	/** @test */
-	public function it_displays_success_flash_notifications()
-	{
+    /** @test */
+    public function it_displays_success_flash_notifications()
+    {
         $message = 'Test message';
         $data = [];
-        $data[] = [
-            'message'   => $message,
-            'level'     => 'success',
-            'important' => false,
-        ];
+        $data[] = $this->messageGenerator($message, 'success', false);
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
 
-		$this->flash->success($message);
-	}
+        $this->flash->success($message);
+    }
 
-	/** @test */
-	public function it_displays_error_flash_notifications()
-	{
+    /** @test */
+    public function it_displays_error_flash_notifications()
+    {
         $message = 'Test message';
         $data = [];
-        $data[] = [
-            'message'   => $message,
-            'level'     => 'danger',
-            'important' => false,
-        ];
+        $data[] = $this->messageGenerator($message, 'danger', false);
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
 
         $this->flash->error($message);
-	}
+    }
 
     /** @test */
     public function it_displays_warning_flash_notifications()
     {
         $message = 'Test message';
         $data = [];
-        $data[] = [
-            'message'   => $message,
-            'level'     => 'warning',
-            'important' => false,
-        ];
+        $data[] = $this->messageGenerator($message, 'warning', false);
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
 
         $this->flash->warning($message);
+    }
+
+    /** @test */
+    public function it_displays_important_default_flash_notifications()
+    {
+        $message = 'Test message';
+        $data = [];
+        $important = true;
+        $data[] = $this->messageGenerator($message, 'info', $important);
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+
+        $this->flash->message($message, 'info', $important);
+
+        $message = 'Test message 2';
+        $important = true;
+        $data[] = $this->messageGenerator($message, 'danger', $important);
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+
+        $this->flash->message($message, 'danger', $important);
+    }
+
+    /** @test */
+    public function it_displays_important_info_flash_notifications()
+    {
+        $message = 'Test message';
+        $data = [];
+        $important = true;
+        $data[] = $this->messageGenerator($message, 'info', $important);
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+
+        $this->flash->info($message, $important);
+    }
+
+    /** @test */
+    public function it_displays_important_success_flash_notifications()
+    {
+        $message = 'Test message';
+        $data = [];
+        $important = true;
+        $data[] = $this->messageGenerator($message, 'success', $important);
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+
+        $this->flash->success($message, $important);
+    }
+
+    /** @test */
+    public function it_displays_important_error_flash_notifications()
+    {
+        $message = 'Test message';
+        $data = [];
+        $important = true;
+        $data[] = $this->messageGenerator($message, 'danger', $important);
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+
+        $this->flash->error($message, $important);
+    }
+
+    /** @test */
+    public function it_displays_important_warning_flash_notifications()
+    {
+        $message = 'Test message';
+        $data = [];
+        $important = true;
+        $data[] = $this->messageGenerator($message, 'warning', $important);
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+
+        $this->flash->warning($message, $important);
     }
 
     /** @test */
@@ -105,17 +148,36 @@ class FlashTest extends PHPUnit_Framework_TestCase {
     {
         $message = 'Test message';
         $data = [];
-        $data[] = [
-            'message'   => $message,
-            'level'     => 'info',
-            'important' => false,
-        ];
+        $data[] = $this->messageGenerator($message, 'info', false);
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
         $this->flash->message($message);
 
         $data[0]['important'] = true;
         $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
         $this->flash->important();
+    }
 
+    /** @test */
+    public function it_displays_notifications_with_icon()
+    {
+        $message = 'Test message';
+        $data = [];
+        $data[] = $this->messageGenerator($message, 'info', false);
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+        $this->flash->message($message);
+
+        $data[0]['icon'] = 'fa fa-tv';
+        $this->session->shouldReceive('flash')->with('flash_notification.messages', $data);
+        $this->flash->icon('fa fa-tv');
+    }
+
+    private function messageGenerator($message, $level, $important, $icon = null)
+    {
+        return [
+            'message'   => $message,
+            'level'     => $level,
+            'important' => $important,
+            'icon'      => $icon
+        ];
     }
 }
