@@ -1,6 +1,6 @@
 <?php
 
-namespace Flash;
+namespace FlashMessage;
 
 class FlashNotifier
 {
@@ -78,24 +78,6 @@ class FlashNotifier
 
         return $this;
     }
-
-    // /**
-    //  * Flash an overlay modal.
-    //  *
-    //  * @param  string $message
-    //  * @param  string $title
-    //  * @param  string $level
-    //  * @return $this
-    //  */
-    // public function overlay($message, $title = 'Notice', $level = 'info')
-    // {
-    //     $this->message($message, $level);
-
-    //     $this->session->flash('flash_notification.overlay', true);
-    //     $this->session->flash('flash_notification.title', $title);
-
-    //     return $this;
-    // }
 
     /**
      * Flash a general message.
