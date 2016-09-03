@@ -4,6 +4,12 @@ namespace FlashMessage;
 
 class FlashNotifier
 {
+    const LEVEL_INFO    = 'info';
+    const LEVEL_SUCCESS = 'success';
+    const LEVEL_WARNING = 'warning';
+    const LEVEL_DANGER  = 'danger';
+    const LEVEL_ERROR   = self::LEVEL_DANGER;
+
     /**
      * The session writer.
      *
@@ -35,12 +41,13 @@ class FlashNotifier
         $this->session = $session;
     }
 
-    /**
-     * Flash an information message.
-     *
-     * @param  string $message
-     * @return $this
-     */
+  /**
+   * Flash an information message.
+   *
+   * @param  string $message
+   * @param bool $important
+   * @return $this
+   */
     public function info($message, $important = false)
     {
         $this->message($message, 'info', $important);
@@ -48,12 +55,13 @@ class FlashNotifier
         return $this;
     }
 
-    /**
-     * Flash a success message.
-     *
-     * @param  string $message
-     * @return $this
-     */
+  /**
+   * Flash a success message.
+   *
+   * @param  string $message
+   * @param bool $important
+   * @return $this
+   */
     public function success($message, $important = false)
     {
         $this->message($message, 'success', $important);
@@ -61,12 +69,13 @@ class FlashNotifier
         return $this;
     }
 
-    /**
-     * Flash an error message.
-     *
-     * @param  string $message
-     * @return $this
-     */
+  /**
+   * Flash an error message.
+   *
+   * @param  string $message
+   * @param bool $important
+   * @return $this
+   */
     public function error($message, $important = false)
     {
         $this->message($message, 'danger', $important);
@@ -74,12 +83,13 @@ class FlashNotifier
         return $this;
     }
 
-    /**
-     * Flash a warning message.
-     *
-     * @param  string $message
-     * @return $this
-     */
+  /**
+   * Flash a warning message.
+   *
+   * @param  string $message
+   * @param bool $important
+   * @return $this
+   */
     public function warning($message, $important = false)
     {
         $this->message($message, 'warning', $important);
@@ -87,37 +97,38 @@ class FlashNotifier
         return $this;
     }
 
-    /**
-     * Flash a general message.
-     *
-     * @param  string $message
-     * @param  string $level
-     * @return $this
-     */
+  /**
+   * Flash a general message.
+   *
+   * @param  string $message
+   * @param  string $level
+   * @param bool $important
+   * @return $this
+   */
     public function message($message, $level = 'info', $important = false)
     {
         $this->lastKey++;
         $this->messages[$this->lastKey] = $this->messageGenerator($message, $level, $important);
-        $this->session->flash('flash_notification.messages', $this->messages);
-
-        return $this;
+        return $this->refresh();
     }
 
-    /**
-     * Add an "important" flash to the session.
-     *
-     * @return $this
-     */
+  /**
+   * Add an "important" flash to the session.
+   *
+   * @param bool $important
+   * @return $this
+   */
     public function important($important = true)
     {
         return $this->setProperty('important', $important);
     }
 
-    /**
-     * Add an icon in front of the message
-     *
-     * @return $this
-     */
+  /**
+   * Add an icon in front of the message
+   *
+   * @param null $icon
+   * @return $this
+   */
     public function icon($icon = null)
     {
         return $this->setProperty('icon', $icon);
@@ -132,9 +143,7 @@ class FlashNotifier
     {
         $this->lastKey  = -1;
         $this->messages = [];
-        $this->session->flash('flash_notification.messages', $this->messages);
-
-        return $this;
+        return $this->refresh();
     }
 
     /**
@@ -151,9 +160,7 @@ class FlashNotifier
         $this->lastKey--;
         array_pop($this->messages);
 
-        $this->session->flash('flash_notification.messages', $this->messages);
-
-        return $this;
+        return $this->refresh();
     }
 
     private function setProperty($property, $value)
@@ -164,9 +171,7 @@ class FlashNotifier
 
         $this->messages[$this->lastKey][$property] = $value;
 
-        $this->session->flash('flash_notification.messages', $this->messages);
-
-        return $this;
+        return $this->refresh();
     }
 
     private function messageGenerator($message, $level, $important, $icon = null)
@@ -179,7 +184,7 @@ class FlashNotifier
         ];
     }
 
-    private function udpateSesion()
+    private function refresh()
     {
         $this->session->flash('flash_notification.messages', $this->messages);
         return $this;
