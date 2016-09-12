@@ -9,11 +9,16 @@ class FlashTest extends PHPUnit_Framework_TestCase {
 
     protected $flash;
 
-	public function setUp()
-	{
+	public function __construct($name = null, array $data = [], $dataName = '')
+    {
         $this->session = m::mock('FlashMessage\SessionStore');
+        return parent::__construct($name, $data, $dataName);
+    }
+
+    public function setUp()
+    {
         $this->flash = new FlashNotifier($this->session);
-	}
+    }
 
 	/** @test */
     public function it_displays_default_flash_notifications()
